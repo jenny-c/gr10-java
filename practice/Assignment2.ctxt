@@ -1,0 +1,5 @@
+#BlueJ class context
+comment0.params=
+comment0.target=void\ gatherAndDisplay()
+comment0.text=\n\ Gathers\ marks\ and\ displays\ them\ and\ their\ mean.\n\ Rejects\ marks\ which\ are\ out\ of\ range.\n
+numComments=1

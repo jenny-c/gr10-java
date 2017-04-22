@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.params=argument
+comment0.target=void\ main(java.lang.String[])
+comment0.text=\n\ Write\ a\ description\ of\ method\ main\ here.\n\n\ @param\ argument\ not\ used\n
+comment1.params=
+comment1.target=void\ lock()
+numComments=2

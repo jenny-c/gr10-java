@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.params=argument
+comment0.target=void\ main(java.lang.String[])
+comment0.text=\n\ Write\ a\ description\ of\ method\ main\ here.\n\n\ @param\ argument\ not\ used\n
+comment1.params=angle1\ angle2\ angle3
+comment1.target=java.lang.String\ triangleType(int,\ int,\ int)
+numComments=2

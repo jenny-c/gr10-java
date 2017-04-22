@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.params=argument
+comment0.target=void\ main(java.lang.String[])
+comment0.text=\n\ Write\ a\ description\ of\ method\ main\ here.\n\n\ @param\ argument\ not\ used\n
+comment1.params=
+comment1.target=SentencePair\ getRandomSentencePair()
+comment1.text=\n\ Returns\ a\ random\ sentence\ pair.\n\n\ @return\ a\ random\ sentence\ pair\n
+comment2.params=
+comment2.target=void\ setInformation()
+comment2.text=\n\ Sets\ player\ information.\n
+comment3.params=
+comment3.target=void\ printSentenceAndCheckAnswer()
+comment3.text=\n\ Prints\ a\ random\ sentence.\n
+comment4.params=
+comment4.target=void\ displayResults()
+comment4.text=\n\ Displays\ count\ of\ correct\ sentences.\n
+numComments=5

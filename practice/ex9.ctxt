@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.params=argument
+comment0.target=void\ main(java.lang.String[])
+comment0.text=\n\ Write\ a\ description\ of\ method\ main\ here.\n\n\ @param\ argument\ not\ used\n
+comment1.params=
+comment1.target=void\ getMarks()
+comment1.text=\n\ Gathers\ marks\ from\ user.\n
+comment2.params=
+comment2.target=void\ calculateMeans()
+comment2.text=\n\ Calculates\ means\ for\ each\ assignment.\n
+comment3.params=
+comment3.target=void\ displayResults()
+comment3.text=\n\ Displays\ marks\ and\ differences.\n
+numComments=4

@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.params=size\ picture\ blackAndWhite
+comment0.target=Photograph(int,\ java.lang.String,\ boolean)
+comment0.text=\n\ Constucts\ a\ photograph\ with\ specified\ characteristics.\n\ \n\ @param\ size\ size\ selection\ of\ this\ photograph\n\ @param\ picture\ picture\ in\ this\ photograph\ \n\ @param\ blackAndWhite\ whether\ this\ photograph\ is\ black\ and\ white\n
+comment1.params=
+comment1.target=java.lang.String\ toString()
+comment1.text=\n\ Returns\ a\ string\ representation\ of\ this\ photograph.\n\ \n\ @return\ a\ string\ a\ representation\ of\ this\ photograph\n
+comment2.params=size
+comment2.target=void\ setSize(int)
+comment2.text=\n\ Sets\ the\ size\ of\ this\ photograph.\n\ \n\ @param\ size\ size\ selection\ of\ this\ photograph\n
+comment3.params=argument
+comment3.target=void\ main(java.lang.String[])
+comment3.text=\n\ Tests\ and\ maniupulates\ objects\ of\ this\ class.\n\n\ @param\ argument\ not\ used\n
+numComments=4

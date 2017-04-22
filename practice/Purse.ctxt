@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.params=argument
+comment0.target=void\ main(java.lang.String[])
+comment0.text=\n\ Write\ a\ description\ of\ method\ main\ here.\n\n\ @param\ argument\ not\ used\n
+comment1.params=
+comment1.target=Purse()
+comment1.text=\n\ Constructs\ an\ instance\ of\ this\ purse\ with\ default\ values.\n
+comment2.params=dimes\ nickels\ quarters
+comment2.target=Purse(int,\ int,\ int)
+comment2.text=\n\ Constructs\ an\ instance\ of\ this\ purse\ with\ give\ values.\n
+comment3.params=numberOfCoins
+comment3.target=java.lang.String\ coinMatch(int)
+comment4.params=
+comment4.target=java.lang.String\ coinMost()
+comment5.params=
+comment5.target=java.lang.String\ coinLeast()
+numComments=6
