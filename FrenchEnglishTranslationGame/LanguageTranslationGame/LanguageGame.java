@@ -46,6 +46,7 @@ public class LanguageGame
      setInformation();
 
      // print random sentence
+     // check answer if right and change as necessary
      printSentenceAndCheckAnswer();
 
      // display results
