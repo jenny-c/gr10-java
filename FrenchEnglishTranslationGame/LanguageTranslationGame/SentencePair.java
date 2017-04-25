@@ -20,14 +20,6 @@ public class SentencePair
     */
    public static void main(String[] argument)
    {
-     // get information -> when to stop
-
-     // print ranadom sentence
-     // get answer
-
-     // change correctness if needed
-
-     //
 
    } // end of method main(String[] argument)
 

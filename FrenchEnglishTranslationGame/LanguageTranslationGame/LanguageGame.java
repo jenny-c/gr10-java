@@ -1,8 +1,9 @@
-import java.util.HashMap;
-import java.util.Random;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Random;
 /**
  * Write a description of class LanguageGame here.
  *
@@ -12,10 +13,14 @@ import java.io.IOException;
 public class LanguageGame
 {
   private static BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
-  private static HashMap<Integer, SentencePair> pairs = new HashMap<Integer, SentencePair>();
-  private static String language;
-  private static int goal;
-  private static int correctCount;
+  private static final String SENTINEL_VALUE = "exit";
+  private static final int NUMBER_OF_SENTENCES = 10;
+
+  private  HashMap<Integer, SentencePair> pairs = new HashMap<Integer, SentencePair>();
+  private  String language;
+  private  int goal;
+  private  int correctCount;
+
    /**
     * Write a description of method main here.
     *
@@ -23,43 +28,56 @@ public class LanguageGame
     */
    public static void main(String[] argument) throws IOException
    {
-     // sentences
-     SentencePair pair1 = new SentencePair("What's your name?", "Comment vous appelez-vous?");
-     SentencePair pair2 = new SentencePair("Pleased to meet you!", "Enchanté(e)!");
-     SentencePair pair3 = new SentencePair("I'm from...", "Je viens de...");
-     SentencePair pair4 = new SentencePair("I live in...", "J’habite à...");
-     SentencePair pair5 = new SentencePair("What is your profession?", "Qu’est-ce que vous faites?");
-     SentencePair pair6 = new SentencePair("What do you do in your free time?", "Qu’est-ce que vous aimez faire pendant votre temps libre?");
-     SentencePair pair7 = new SentencePair("How’s the weather?", "Quel temps fait-il?");
-     SentencePair pair8 = new SentencePair("Do you have siblings?", "Est-ce que vous avez des frères et sœurs?");
-     SentencePair pair9 = new SentencePair("What's your favorite movie?", "Quel est ton/votre film préféré?");
-     SentencePair pair10 = new SentencePair("Have you visited...?", "Est-ce que vous avez visité...?");
 
-     SentencePair[] sentence = {pair1, pair2, pair3, pair4, pair5, pair6, pair7, pair8, pair9, pair10};
-
-     for (int i = 0; i < english.length; i++)
-     {
-       pairs.put((i), sentence[i]);
-     }
-
-     // get information -> when to stop
-     setInformation();
-
-     // print random sentence
-     // check answer if right and change as necessary
-     printSentenceAndCheckAnswer();
-
-     // display results
-     displayResults();
    } // end of method main(String[] argument)
 
+   /**
+    * Constructs a default language game.
+    */
+   public LanguageGame() throws IOException
+   {
+     // sentences
+     final String ENGLISH_FILE = "english.text";
+     final String FRENCH_FILE = "french.text";
+
+     BufferedReader englishFile = new BufferedReader(new FileReader(ENGLISH_FILE));
+     BufferedReader frenchFile = new BufferedReader(new FileReader(FRENCH_FILE));
+
+     // assign to hashmap
+     for (int i = 0; i < NUMBER_OF_SENTENCES; i++)
+     {
+       String englishSentence = englishFile.readLine();
+       String frenchSentence = frenchFile.readLine();
+       pairs.put((i+1), new SentencePair(englishSentence, frenchSentence));
+     }
+
+     // wrap up
+     englishFile.close();
+     frenchFile.close();
+   }
+
+   /**
+    *
+    */
+    public void startGame() throws IOException
+    {
+      // get information -> when to stop
+      setInformation();
+
+      // print random sentence
+      // check answer if right and change as necessary
+      printSentenceAndCheckAnswer();
+
+      // display results
+      displayResults();
+    } // end of method startGame()
 
    /**
     * Returns a random sentence pair.
     *
     * @return a random sentence pair
     */
-   public static SentencePair getRandomSentencePair()
+   public SentencePair getRandomSentencePair()
    {
      Random rand = new Random();
      return pairs.get(rand.nextInt(pairs.size()));
@@ -68,7 +86,7 @@ public class LanguageGame
    /**
     * Sets player information.
     */
-   public static void setInformation() throws IOException
+   private void setInformation() throws IOException
    {
      goal = -1;
      boolean valid = false;
@@ -144,10 +162,9 @@ public class LanguageGame
    /**
     * Prints a random sentence.
     */
-   public static void printSentenceAndCheckAnswer() throws IOException
+   private void printSentenceAndCheckAnswer() throws IOException
    {
      correctCount = 0;
-     String sentinelValue = "exit";
      String answer;
      SentencePair currentPair;
      do
@@ -190,13 +207,13 @@ public class LanguageGame
          }
        }
      }
-     while (correctCount != goal && !(answer.equals(sentinelValue)));
+     while (correctCount != goal && !(answer.equals(SENTINEL_VALUE)));
    } // end of method printSentenceAndCheckAnswer()
 
    /**
     * Displays count of correct sentences.
     */
-   public static void displayResults()
+   private void displayResults()
    {
      System.out.println("Number of sentences correct:" + correctCount);
    } // end of displayResults()
