@@ -17,9 +17,11 @@ public class LanguageGame
   private static final int NUMBER_OF_SENTENCES = 10;
 
   private  HashMap<Integer, SentencePair> pairs = new HashMap<Integer, SentencePair>();
-  private  String language;
-  private  int goal;
-  private  int correctCount;
+  private SentencePair currentPair;
+  private String answer;
+  private String language;
+  private int goal;
+  private int correctCount;
 
    /**
     * Write a description of method main here.
@@ -54,33 +56,49 @@ public class LanguageGame
      // wrap up
      englishFile.close();
      frenchFile.close();
+     
+     // set default values
+     goal = -1;
+     language = "english";
+     correctCount = 0;
    }
 
    /**
     *
     */
-    public void startGame() throws IOException
-    {
-      // get information -> when to stop
-      setInformation();
+   public void startGame() throws IOException
+   { 
+     // get information -> when to stop
+     setInformation();
+     
+     // print random sentence
+     // check answer if right and change as necessary
+     do
+     {
+       getRandomSentencePair();
+       printSentence();
+       checkAnswer();
+     }
+     while (correctCount != goal && !(answer.equals(SENTINEL_VALUE)));
 
-      // print random sentence
-      // check answer if right and change as necessary
-      printSentenceAndCheckAnswer();
-
-      // display results
-      displayResults();
-    } // end of method startGame()
+     // display results
+     displayResults();
+   } // end of method startGame()
 
    /**
     * Returns a random sentence pair.
     *
     * @return a random sentence pair
     */
-   public SentencePair getRandomSentencePair()
+   private void getRandomSentencePair()
    {
-     Random rand = new Random();
-     return pairs.get(rand.nextInt(pairs.size()));
+     Random rand;
+     do 
+     {
+       rand = new Random();
+       currentPair = pairs.get(rand.nextInt(pairs.size())+1);
+     }
+     while (currentPair.isCorrect());
    } // end of method getRandomSentencePair()
 
    /**
@@ -162,53 +180,47 @@ public class LanguageGame
    /**
     * Prints a random sentence.
     */
-   private void printSentenceAndCheckAnswer() throws IOException
+   private void printSentence() throws IOException
    {
-     correctCount = 0;
-     String answer;
-     SentencePair currentPair;
-     do
      {
-       // get a sentence pair that isn't correct
-       do
-       {
-         currentPair = getRandomSentencePair();
-       }
-       while (currentPair.isCorrect());
-
        if (language.equals("english"))
        {
          System.out.println(currentPair.getEnglishSentence());
-         correctCount++;
        }
        else
        {
          System.out.println(currentPair.getFrenchSentence());
-         correctCount++;
-       }
-
-       // get answer and change correctness as needed
-       System.out.print("Translation (\"exit\" to exit): ");
-       answer = console.readLine();
-       if (language.equals("english"))
-       {
-         if (answer.equals(currentPair.getFrenchSentence()))
-         {
-           currentPair.setCorrectness(true);
-           System.out.print("correct!");
-         }
-       }
-       else
-       {
-         if (answer.equals(currentPair.getEnglishSentence()))
-         {
-           currentPair.setCorrectness(true);
-           System.out.print("correct!");
-         }
        }
      }
-     while (correctCount != goal && !(answer.equals(SENTINEL_VALUE)));
    } // end of method printSentenceAndCheckAnswer()
+
+   /**
+    * Checks the correctness of the user's answer.
+    */
+   private void checkAnswer() throws IOException
+   {
+     // get answer and change correctness as needed
+     System.out.print("Translation (\"exit\" to exit): ");
+     answer = console.readLine();
+     if (language.equals("english"))
+     {
+       if (answer.equals(currentPair.getFrenchSentence()))
+       {
+         currentPair.setCorrectness(true);
+         System.out.println("correct!");
+         correctCount++;
+       }
+     }
+     else
+     {
+       if (answer.equals(currentPair.getEnglishSentence()))
+       {
+         currentPair.setCorrectness(true);
+         System.out.println("correct!");
+         correctCount++;
+       }
+     }
+   }
 
    /**
     * Displays count of correct sentences.
