@@ -56,7 +56,7 @@ public class LanguageGame
      // wrap up
      englishFile.close();
      frenchFile.close();
-     
+
      // set default values
      goal = -1;
      language = "english";
@@ -67,10 +67,10 @@ public class LanguageGame
     *
     */
    public void startGame() throws IOException
-   { 
+   {
      // get information -> when to stop
      setInformation();
-     
+
      // print random sentence
      // check answer if right and change as necessary
      do
@@ -93,7 +93,7 @@ public class LanguageGame
    private void getRandomSentencePair()
    {
      Random rand;
-     do 
+     do
      {
        rand = new Random();
        currentPair = pairs.get(rand.nextInt(pairs.size())+1);
@@ -227,6 +227,6 @@ public class LanguageGame
     */
    private void displayResults()
    {
-     System.out.println("Number of sentences correct:" + correctCount);
+     System.out.println("Number of sentences correct: " + correctCount);
    } // end of displayResults()
 } // end of class LanguageGame
