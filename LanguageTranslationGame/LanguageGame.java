@@ -19,9 +19,10 @@ public class LanguageGame
   private  HashMap<Integer, SentencePair> pairs = new HashMap<Integer, SentencePair>();
   private SentencePair currentPair;
   private String answer;
-  private String language;
   private int goal;
   private int correctCount;
+  private String language;
+  private Random randomLanguage = new Random();
 
    /**
     * Write a description of method main here.
@@ -59,8 +60,8 @@ public class LanguageGame
 
      // set default values
      goal = -1;
-     language = "english";
      correctCount = 0;
+     language = "";
    }
 
    /**
@@ -69,7 +70,7 @@ public class LanguageGame
    public void startGame() throws IOException
    {
      // get information -> when to stop
-     setInformation();
+     setGoal();
 
      // print random sentence
      // check answer if right and change as necessary
@@ -104,37 +105,10 @@ public class LanguageGame
    /**
     * Sets player information.
     */
-   private void setInformation() throws IOException
+   private void setGoal() throws IOException
    {
      goal = -1;
      boolean valid = false;
-     while (!valid)
-     {
-       System.out.print("What language (english or french) would you like to translate from? ");
-       switch (console.readLine())
-       {
-         case "english":
-         case "English":
-         case "eng":
-         case "Eng":
-           language = "english";
-           valid = true;
-           break;
-
-         case "french":
-         case "French":
-         case "fre":
-         case "Fre":
-           language = "french";
-           valid = true;
-           break;
-
-         default:
-           System.out.println("It looks like you didn't pick a valid language. Please choose either french or english.");
-           break;
-       }
-    }
-     valid = false;
      while (!valid)
      {
        System.out.print("Would you like to set a goal? ");
@@ -175,7 +149,7 @@ public class LanguageGame
            System.out.println("It looks like you didn't choose a valid response. Please choose either yes or no.");
        }
      }
-   } // end of method setInformation()
+   } // end of method setGoal()
 
    /**
     * Prints a random sentence.
@@ -183,9 +157,10 @@ public class LanguageGame
    private void printSentence() throws IOException
    {
      {
-       if (language.equals("english"))
+       if (randomLanguage.nextInt(2) == 0)
        {
          System.out.println(currentPair.getEnglishSentence());
+         language = "english";
        }
        else
        {
@@ -229,4 +204,4 @@ public class LanguageGame
    {
      System.out.println("Number of sentences correct: " + correctCount);
    } // end of displayResults()
-} // end of class LanguageGame
+} // end of class randomLanguageGame
