@@ -23,4 +23,6 @@ comment6.text=\n\ Checks\ the\ correctness\ of\ the\ user's\ answer.\n
 comment7.params=
 comment7.target=void\ displayResults()
 comment7.text=\n\ Displays\ count\ of\ correct\ sentences.\n
-numComments=8
+comment8.params=
+comment8.target=void\ changeResultsFile()
+numComments=9

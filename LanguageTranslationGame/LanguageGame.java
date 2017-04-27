@@ -1,7 +1,9 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Random;
 /**
@@ -23,6 +25,9 @@ public class LanguageGame
   private int correctCount;
   private String language;
   private Random randomLanguage = new Random();
+  private int highScore;
+  private int lowestScore;
+  private int lastScore;
 
    /**
     * Write a description of method main here.
@@ -42,9 +47,11 @@ public class LanguageGame
      // sentences
      final String ENGLISH_FILE = "english.text";
      final String FRENCH_FILE = "french.text";
+     final String RESULTS_FILE = "previousResults.text";
 
      BufferedReader englishFile = new BufferedReader(new FileReader(ENGLISH_FILE));
      BufferedReader frenchFile = new BufferedReader(new FileReader(FRENCH_FILE));
+     BufferedReader resultsFile = new BufferedReader(new FileReader(RESULTS_FILE));
 
      // assign to hashmap
      for (int i = 0; i < NUMBER_OF_SENTENCES; i++)
@@ -54,9 +61,15 @@ public class LanguageGame
        pairs.put((i+1), new SentencePair(englishSentence, frenchSentence));
      }
 
+     // set scores
+     highScore = Integer.parseInt(resultsFile.readLine());
+     lowestScore = Integer.parseInt(resultsFile.readLine());
+     lastScore = Integer.parseInt(resultsFile.readLine());
+
      // wrap up
      englishFile.close();
      frenchFile.close();
+     resultsFile.close();
 
      // set default values
      goal = -1;
@@ -72,6 +85,12 @@ public class LanguageGame
      // get information -> when to stop
      setGoal();
 
+     // show last score
+     if (lastScore != 0)
+     {
+       System.out.println("Try to beat your last score: " + lastScore);
+     }
+
      // print random sentence
      // check answer if right and change as necessary
      do
@@ -81,6 +100,9 @@ public class LanguageGame
        checkAnswer();
      }
      while (correctCount != goal && !(answer.equals(SENTINEL_VALUE)));
+
+     // change file
+     changeResultsFile();
 
      // display results
      displayResults();
@@ -156,16 +178,16 @@ public class LanguageGame
     */
    private void printSentence() throws IOException
    {
+     System.out.println();
+     if (randomLanguage.nextInt(2) == 0)
      {
-       if (randomLanguage.nextInt(2) == 0)
-       {
-         System.out.println(currentPair.getEnglishSentence());
-         language = "english";
-       }
-       else
-       {
-         System.out.println(currentPair.getFrenchSentence());
-       }
+       System.out.println(currentPair.getEnglishSentence());
+       language = "english";
+     }
+     else
+     {
+       System.out.println(currentPair.getFrenchSentence());
+       language = "french";
      }
    } // end of method printSentenceAndCheckAnswer()
 
@@ -177,22 +199,33 @@ public class LanguageGame
      // get answer and change correctness as needed
      System.out.print("Translation (\"exit\" to exit): ");
      answer = console.readLine();
-     if (language.equals("english"))
+     if (!answer.equals(SENTINEL_VALUE))
      {
-       if (answer.equals(currentPair.getFrenchSentence()))
+       if (language.equals("english"))
        {
-         currentPair.setCorrectness(true);
-         System.out.println("correct!");
-         correctCount++;
+         if (answer.equals(currentPair.getFrenchSentence()))
+         {
+           currentPair.setCorrectness(true);
+           System.out.println("Correct!");
+           correctCount++;
+         }
+         else
+         {
+           System.out.println("Wrong..");
+         }
        }
-     }
-     else
-     {
-       if (answer.equals(currentPair.getEnglishSentence()))
+       else
        {
-         currentPair.setCorrectness(true);
-         System.out.println("correct!");
-         correctCount++;
+         if (answer.equals(currentPair.getEnglishSentence()))
+         {
+           currentPair.setCorrectness(true);
+           System.out.println("Correct!");
+           correctCount++;
+         }
+         else
+         {
+           System.out.println("Wrong..");
+         }
        }
      }
    }
@@ -202,6 +235,31 @@ public class LanguageGame
     */
    private void displayResults()
    {
-     System.out.println("Number of sentences correct: " + correctCount);
+     System.out.println("\nNumber of sentences correct: " + correctCount);
+     System.out.println("        All time high score: " + highScore);
+     System.out.println("      All time lowest score: " + lowestScore);
    } // end of displayResults()
+
+   private void changeResultsFile() throws IOException
+   {
+     final String RESULTS_FILE = "previousResults.text";
+
+     PrintWriter outputFile = new PrintWriter(new FileWriter(RESULTS_FILE));
+
+     if (correctCount > highScore)
+     {
+       highScore = correctCount;
+     }
+     if (correctCount < lowestScore)
+     {
+       lowestScore = correctCount;
+     }
+     lastScore = correctCount;
+
+     outputFile.println(highScore);
+     outputFile.println(lowestScore);
+     outputFile.println(lastScore);
+
+     outputFile.close();
+   }
 } // end of class randomLanguageGame
