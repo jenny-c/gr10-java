@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.params=argument
+comment0.target=void\ main(java.lang.String[])
+comment0.text=\n\ Write\ a\ description\ of\ method\ main\ here.\n\n\ @param\ argument\ not\ used\n
+comment1.params=
+comment1.target=LanguageGameGUI()
+comment1.text=\n\ Constructs\ a\ default\ language\ game.\n
+comment2.params=
+comment2.target=void\ startGame()
+comment2.text=\n\n
+comment3.params=
+comment3.target=void\ getRandomSentencePair()
+comment3.text=\n\ Returns\ a\ random\ sentence\ pair.\n\n\ @return\ a\ random\ sentence\ pair\n
+comment4.params=
+comment4.target=void\ setGoal()
+comment4.text=\n\ Sets\ player\ information.\n
+comment5.params=
+comment5.target=void\ checkAnswer()
+comment5.text=\n\ Checks\ the\ correctness\ of\ the\ user's\ answer.\n
+comment6.params=
+comment6.target=void\ displayResults()
+comment6.text=\n\ Displays\ count\ of\ correct\ sentences.\n
+comment7.params=
+comment7.target=void\ changeResultsFile()
+numComments=8
