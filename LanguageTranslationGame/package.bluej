@@ -1,3 +1,36 @@
 #BlueJ package file
-#Fri Apr 21 22:07:04 EDT 2017
+dependency1.from=LanguageGame
+dependency1.to=SentencePair
+dependency1.type=UsesDependency
+objectbench.height=100
+objectbench.width=363
+package.editor.height=400
+package.editor.width=560
+package.editor.x=316
+package.editor.y=135
+package.numDependencies=1
+package.numTargets=2
+package.showExtends=true
+package.showUses=true
 project.charset=UTF-8
+target1.height=50
+target1.name=SentencePair
+target1.showInterface=false
+target1.type=ClassTarget
+target1.typeParameters=
+target1.width=100
+target1.x=130
+target1.y=10
+target2.editor.height=700
+target2.editor.width=1143
+target2.editor.x=304
+target2.editor.y=195
+target2.height=50
+target2.name=LanguageGame
+target2.naviview.expanded=true
+target2.showInterface=false
+target2.type=ClassTarget
+target2.typeParameters=
+target2.width=120
+target2.x=210
+target2.y=70
