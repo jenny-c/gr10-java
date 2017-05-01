@@ -9,8 +9,8 @@ import javax.swing.JOptionPane;
  */
 public class OptionPane1
 {
-   private static final String OUTPUT_DIALOGUE_TITLE = "Results:";
-   private static final String ERROR_DIALOGUE_TITLE = "Error:";
+   private static final String OUTPUT_DIALOGUE_TITLE = "Results";
+   private static final String ERROR_DIALOGUE_TITLE = "Error";
    /**
     * Write a description of method main here.
     *
@@ -38,7 +38,7 @@ public class OptionPane1
           }
           catch (NumberFormatException exception)
           {
-              JOptionPane.showMessageDialog(null, integerParseError, ERROR_DIALOGUE_TITLE, JOptionPane.INFORMATION_MESSAGE);
+              JOptionPane.showMessageDialog(null, integerParseError, ERROR_DIALOGUE_TITLE, JOptionPane.ERROR_MESSAGE);
           }
       }
       messageString = "Your integer: " + number;
