@@ -3,6 +3,6 @@ comment0.params=argument
 comment0.target=void\ main(java.lang.String[])
 comment0.text=\n\ Write\ a\ description\ of\ method\ main\ here.\n\n\ @param\ argument\ not\ used\n
 comment1.params=
-comment1.target=FramePractice()
+comment1.target=ImageViewer1()
 comment1.text=\n\ Constructs\ a\ frame.\n
 numComments=2

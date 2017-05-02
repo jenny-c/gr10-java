@@ -6,7 +6,7 @@ import javax.swing.JLabel;
  * @author GivenName FamilyName
  * @version 1.0 yyyy-mm-dd
  */
-public class FramePractice
+public class ImageViewer2
 {
    // instance fields
    private JFrame frame;
@@ -24,7 +24,7 @@ public class FramePractice
    /**
     * Constructs a frame.
     */
-   FramePractice()
+   ImageViewer2()
    {
        frame = new JFrame("Image Viewer");
        
@@ -33,5 +33,15 @@ public class FramePractice
        
        frame.pack();
        frame.setVisible(true);
+   }
+   
+   /**
+    * Sets the visibility of this frame.
+    * 
+    * @param shouldBeVisible whether this frame should be visible
+    */
+   public void setVisibility(boolean shouldBeVisible)
+   {
+       frame.setVisible(shouldBeVisible);
    }
 } // end of class FramePractice
