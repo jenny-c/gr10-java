@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.params=argument
+comment0.target=void\ main(java.lang.String[])
+comment0.text=\r\n\ Write\ a\ description\ of\ method\ main\ here.\r\n\r\n\ @param\ argument\ not\ used\r\n
+comment1.params=
+comment1.target=ImageViewer9()
+comment1.text=\r\n\ Constructs\ a\ frame.\r\n
+comment2.params=shouldBeVisible
+comment2.target=void\ setVisibility(boolean)
+comment2.text=\r\n\ Sets\ the\ visibility\ of\ this\ frame.\r\n\ \r\n\ @param\ shouldBeVisible\ whether\ this\ frame\ should\ be\ visible\r\n
+comment3.params=labelText
+comment3.target=void\ setLabel(java.lang.String)
+comment3.text=\r\n\ Sets\ the\ new\ label\ for\ this\ frame.\r\n\ \r\n\ @param\ labelText\ new\ label\ for\ this\ frame\r\n
+comment4.params=event
+comment4.target=void\ actionPerformed(java.awt.event.ActionEvent)
+numComments=5
