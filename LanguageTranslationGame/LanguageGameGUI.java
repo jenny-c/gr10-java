@@ -1,12 +1,30 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JOptionPane;
+
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.io.FileWriter;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Random;
-import javax.swing.JOptionPane;
+
 /**
  * Write a description of class LanguageGame here.
  *
@@ -19,6 +37,12 @@ public class LanguageGameGUI
   private static final String SENTINEL_VALUE = "exit";
   private static final int NUMBER_OF_SENTENCES = 10;
 
+  private static final int FRAME_HEIGHT = 600;
+  private static final String FRAME_TITLE = "Image Viewer";
+  private static final int FRAME_WIDTH = 600;
+  private static final String IMAGE_CREDIT = "https://www.iconfinder.com/icons/87928/translate_icon";
+  private static final String IMAGE_SOURCE = "images/translate.jpeg";
+
   private HashMap<Integer, SentencePairGUI> pairs = new HashMap<Integer, SentencePairGUI>();
   private SentencePairGUI currentPair;
   private String answer;
@@ -30,6 +54,7 @@ public class LanguageGameGUI
   private int lowestScore;
   private int lastScore;
   private String inputString;
+  private ImageComponent image1;
 
    /**
     * Write a description of method main here.
@@ -46,6 +71,9 @@ public class LanguageGameGUI
     */
    public LanguageGameGUI() throws IOException
    {
+     // images
+     image1 = new ImageComponent(IMAGE_SOURCE);
+
      // sentences
      final String ENGLISH_FILE = "english.text";
      final String FRENCH_FILE = "french.text";
@@ -231,7 +259,7 @@ public class LanguageGameGUI
     */
    private void displayResults()
    {
-     JOptionPane.showMessageDialog(null, "\nNumber of sentences correct: " +
+     JOptionPane.showMessageDialog(image1, "\nNumber of sentences correct: " +
       correctCount + "\n        All time high score: " + highScore +
       "\n      All time lowest score: " + lowestScore);
    } // end of displayResults()
@@ -257,5 +285,45 @@ public class LanguageGameGUI
      outputFile.println(lastScore);
 
      outputFile.close();
+   }
+
+   /*
+    * A component with a drawn image.
+    */
+   private class ImageComponent extends Component
+   {
+     // class fields
+     private static final int NO_PROBLEMS_ENCOUNTERED = 0;
+     private static final int PROBLEMS_ENCOUNTERED = -1;
+
+     // instance fields
+     private BufferedImage bufferedImage;
+     private int status;
+
+     /* constructors */
+
+     public ImageComponent(String fileName)
+     {
+       bufferedImage = null;
+       status = NO_PROBLEMS_ENCOUNTERED;
+       try
+       {
+         bufferedImage = ImageIO.read(new File(fileName));
+       }
+       catch (IOException exception)
+       {
+         status = PROBLEMS_ENCOUNTERED;
+       } // end of catch(IOException exception)
+     } // end of constructor ImageComponent(String fileName)
+
+     /* accessors */
+
+     public int getStatus()
+     {
+       return status;
+     } // end of method getStatus()
+
+
+
    }
 } // end of class randomLanguageGame
