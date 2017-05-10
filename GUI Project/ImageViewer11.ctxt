@@ -1,0 +1,23 @@
+#BlueJ class context
+comment0.params=
+comment0.target=ImageViewer11()
+comment0.text=\n\ Creates\ an\ ImageViewer\ with\ a\ fixed\ image.\n
+comment1.params=shouldBeVisible
+comment1.target=void\ setVisible(boolean)
+comment1.text=\n\ Sets\ the\ visibility\ of\ this\ image\ viewer.\n\ \n\ @param\ shouldBeVisible\ <code>true</code>,\ if\ this\ image\ viewer\ should\n\ be\ visible;\ otherwise\ <code>false</code>\n
+comment2.params=shouldBeVisible\ delay
+comment2.target=void\ setVisible(boolean,\ int)
+comment2.text=\n\ Sets\ the\ visibility\ of\ this\ image\ viewer.\n\ \n\ @param\ shouldBeVisible\ <code>true</code>,\ if\ this\ image\ viewer\ should\n\ be\ visible;\ otherwise\ <code>false</code>\n\ @param\ delay\ the\ time\ in\ milliseconds\ the\ changed\ visibility\ should\ persist\n
+comment3.params=
+comment3.target=void\ loadImageData()
+comment3.text=\n\ Load\ image\ data\ for\ later\ use.\n
+comment4.params=
+comment4.target=void\ makeControlButtonPanel()
+comment4.text=\n\ Creates\ the\ control-buttons\ panel.\n
+comment5.params=
+comment5.target=void\ makeFrame()
+comment5.text=\n\ Creates\ the\ application\ frame\ and\ its\ content.\n
+comment6.params=
+comment6.target=void\ makeImageButtonPanel()
+comment6.text=\n\ Creates\ the\ image-buttons\ panel.\n
+numComments=7
