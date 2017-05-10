@@ -36,12 +36,14 @@ public class LanguageGameGUI
   private static BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
   private static final String SENTINEL_VALUE = "exit";
   private static final int NUMBER_OF_SENTENCES = 10;
+  private static final Color BACKGROUND_COLOUR = Color.WHITE;
+  private static final String ERROR_IMAGE_UNAVAILABLE = "Something went wrong.";
 
   private static final int FRAME_HEIGHT = 600;
-  private static final String FRAME_TITLE = "Image Viewer";
+  private static final String FRAME_TITLE = "Translation Game";
   private static final int FRAME_WIDTH = 600;
   private static final String IMAGE_CREDIT = "https://www.iconfinder.com/icons/87928/translate_icon";
-  private static final String IMAGE_SOURCE = "images/translate.jpeg";
+  private static final String IMAGE_SOURCE = "images/translate.png";
 
   private HashMap<Integer, SentencePairGUI> pairs = new HashMap<Integer, SentencePairGUI>();
   private SentencePairGUI currentPair;
@@ -54,7 +56,13 @@ public class LanguageGameGUI
   private int lowestScore;
   private int lastScore;
   private String inputString;
-  private ImageComponent image1;
+  private ImageComponent image;
+
+  private JFrame frame;
+  private JLabel imageCredit;
+  private JPanel buttonPanel;
+  private JButton startButton;
+  private JButton quitButton;
 
    /**
     * Write a description of method main here.
@@ -71,8 +79,11 @@ public class LanguageGameGUI
     */
    public LanguageGameGUI() throws IOException
    {
+     // make frame
+     makeFrame();
+
      // images
-     image1 = new ImageComponent(IMAGE_SOURCE);
+     image = new ImageComponent(IMAGE_SOURCE);
 
      // sentences
      final String ENGLISH_FILE = "english.text";
@@ -105,10 +116,12 @@ public class LanguageGameGUI
      goal = -1;
      correctCount = 0;
      language = "";
+
+     startGame();
    }
 
    /**
-    *
+    * good
     */
    public void startGame() throws IOException
    {
@@ -137,6 +150,47 @@ public class LanguageGameGUI
      displayResults();
    } // end of method startGame()
 
+   private void makeButtonPanel()
+   {
+     buttonPanel = new JPanel();
+     buttonPanel.setBackground(BACKGROUND_COLOUR);
+
+     ButtonListener actionListener = new ButtonListener();
+
+     quitButton = new JButton("quit");
+     quitButton.addActionListener(actionListener);
+     buttonPanel.add(quitButton);
+   }
+
+   /*
+    * Creates the application frame and its content.
+    */
+   private void makeFrame() throws IOException
+   {
+     frame = new JFrame(FRAME_TITLE);
+     frame.setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
+     frame.getContentPane().setBackground(BACKGROUND_COLOUR);
+
+     image = new ImageComponent(IMAGE_SOURCE);
+     frame.add(image, BorderLayout.CENTER);
+
+     if (image.getStatus() == 0)
+     {
+       imageCredit = new JLabel(IMAGE_CREDIT);
+     }
+     else
+     {
+       imageCredit = new JLabel(ERROR_IMAGE_UNAVAILABLE);
+     } // end of if (image.getStatus() == 0)
+     frame.add(imageCredit, BorderLayout.PAGE_START);
+
+     makeButtonPanel();
+     frame.add(buttonPanel, BorderLayout.PAGE_END);
+
+     frame.pack();
+     frame.setVisible(true);
+   }
+
    /**
     * Returns a random sentence pair.
     *
@@ -148,6 +202,7 @@ public class LanguageGameGUI
      do
      {
        rand = new Random();
+       System.out.println(pairs.size());
        currentPair = pairs.get(rand.nextInt(pairs.size())+1);
      }
      while (currentPair.isCorrect());
@@ -259,7 +314,7 @@ public class LanguageGameGUI
     */
    private void displayResults()
    {
-     JOptionPane.showMessageDialog(image1, "\nNumber of sentences correct: " +
+     JOptionPane.showMessageDialog(null, "\nNumber of sentences correct: " +
       correctCount + "\n        All time high score: " + highScore +
       "\n      All time lowest score: " + lowestScore);
    } // end of displayResults()
@@ -313,17 +368,63 @@ public class LanguageGameGUI
        catch (IOException exception)
        {
          status = PROBLEMS_ENCOUNTERED;
-       } // end of catch(IOException exception)
+       } // end of catch (IOException exception)
      } // end of constructor ImageComponent(String fileName)
 
      /* accessors */
 
-     public int getStatus()
-     {
-       return status;
-     } // end of method getStatus()
+     /*
+      * Returns the status of this component: NO_PROBLEMS_ENCOUNTERED
+      * or PROBLEMS_ENCOUNTERED.
+      */
+       public int getStatus()
+       {
+         return status;
+       } // end of method getStatus()
 
+       /*
+        * Returns a string representation of this component.
+        *
+        * @return a string representing this component
+        */
+        public String toString()
+        {
+         return
+         getClass().getName()
+         + "["
+         + "buffered image: " + bufferedImage
+         + ", status: " + status
+         + "]";
+        } // end of method toString()
 
+        /* mutators */
 
-   }
+        /*
+         * Called when the contents of the component should be painted, such as
+         * when the component is first being shown or is damaged and in need of
+         * repair.
+         */
+        public void paint(Graphics graphicsContext)
+        {
+            graphicsContext.drawImage(bufferedImage, 0, 0, null);
+        } // end of method paint(Graphics graphicsContext)
+
+    } // end of class ImageComponent
+
+   private class ButtonListener implements ActionListener
+   {
+         /*
+          * Responds to button events.
+          */
+         public void actionPerformed(ActionEvent event)
+         {
+             Object source = event.getSource();
+
+             if (source == quitButton)
+             {
+                 System.exit(0);
+             } // end of if (source == quitButton)
+
+         } // end of method actionPerformed(ActionEvent event)
+    }
 } // end of class randomLanguageGame
