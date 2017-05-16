@@ -202,7 +202,6 @@ public class LanguageGameGUI
      do
      {
        rand = new Random();
-       System.out.println(pairs.size());
        currentPair = pairs.get(rand.nextInt(pairs.size())+1);
      }
      while (currentPair.isCorrect());
@@ -374,8 +373,7 @@ public class LanguageGameGUI
      /* accessors */
 
      /*
-      * Returns the status of this component: NO_PROBLEMS_ENCOUNTERED
-      * or PROBLEMS_ENCOUNTERED.
+      *
       */
        public int getStatus()
        {
@@ -400,9 +398,7 @@ public class LanguageGameGUI
         /* mutators */
 
         /*
-         * Called when the contents of the component should be painted, such as
-         * when the component is first being shown or is damaged and in need of
-         * repair.
+         *
          */
         public void paint(Graphics graphicsContext)
         {
