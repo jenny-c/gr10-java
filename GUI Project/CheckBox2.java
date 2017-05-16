@@ -7,12 +7,12 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 /**
- * Write a description of class CheckBox here.
+ * Write a description of class CheckBox2 here.
  * 
  * @author Jenny Chen
  * @version 1.0 yyyy-mm-dd
  */
-public class CheckBox implements ItemListener
+public class CheckBox2 implements ItemListener
 {
    // class constants
    private static final int FRAME_HEIGHT = 600;
@@ -22,6 +22,7 @@ public class CheckBox implements ItemListener
    private static final String DEFAULT_LABEL_TEXT = "Hi";
    private static final String NEW_LABEL_TEXT = "Bye";
    private static final Color BACKGROUND_COLOUR = Color.WHITE;
+   private static final Color NEW_BACKGROUND_COLOUR = Color.RED;
    
    //instance fields
    private JCheckBox checkBox;
@@ -36,10 +37,10 @@ public class CheckBox implements ItemListener
     */
    public static void main(String[] argument)
    {
-      CheckBox myCheckBox = new CheckBox();
+      CheckBox2 myCheckBox = new CheckBox2();
    } // end of method main(String[] argument)
 
-   public CheckBox()
+   public CheckBox2()
    {
        makeFrame();
    }
@@ -69,11 +70,15 @@ public class CheckBox implements ItemListener
            {
                if (checkBox.isSelected())
                {
-                   label.setText(NEW_LABEL_TEXT);
+                   frame.getContentPane().setBackground(NEW_BACKGROUND_COLOUR);
+                   // changes check box text and text colour
+                   checkBox.setText("wow");
+                   checkBox.setForeground(Color.BLUE);
                }
                else 
                {
-                   label.setText(DEFAULT_LABEL_TEXT);
+                   frame.getContentPane().setBackground(BACKGROUND_COLOUR);
+                   checkBox.setText(CHECK_BOX_TEXT);
                }
            }
        }
