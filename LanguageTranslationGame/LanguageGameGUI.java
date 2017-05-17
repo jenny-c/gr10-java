@@ -17,9 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.FileWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -34,16 +34,16 @@ import java.util.Random;
 public class LanguageGameGUI
 {
   private static BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
-  private static final String SENTINEL_VALUE = "exit";
-  private static final int NUMBER_OF_SENTENCES = 10;
+  
   private static final Color BACKGROUND_COLOUR = Color.WHITE;
   private static final String ERROR_IMAGE_UNAVAILABLE = "Something went wrong.";
-
   private static final int FRAME_HEIGHT = 600;
   private static final String FRAME_TITLE = "Translation Game";
   private static final int FRAME_WIDTH = 600;
   private static final String IMAGE_CREDIT = "https://www.iconfinder.com/icons/87928/translate_icon";
   private static final String IMAGE_SOURCE = "images/translate.png";
+  private static final int NUMBER_OF_SENTENCES = 10;
+  private static final String SENTINEL_VALUE = "exit";
 
   private HashMap<Integer, SentencePairGUI> pairs = new HashMap<Integer, SentencePairGUI>();
   private SentencePairGUI currentPair;
@@ -120,10 +120,10 @@ public class LanguageGameGUI
      startGame();
    }
 
-   /**
-    * good
+   /*
+    * Starts the translation game and runs necessary methods.
     */
-   public void startGame() throws IOException
+   private void startGame() throws IOException
    {
      // get information -> when to stop
      setGoal();
@@ -150,6 +150,9 @@ public class LanguageGameGUI
      displayResults();
    } // end of method startGame()
 
+   /*
+    * Constructs the button panel.
+    */
    private void makeButtonPanel()
    {
      buttonPanel = new JPanel();
@@ -191,10 +194,8 @@ public class LanguageGameGUI
      frame.setVisible(true);
    }
 
-   /**
+   /*
     * Returns a random sentence pair.
-    *
-    * @return a random sentence pair
     */
    private void getRandomSentencePair()
    {
@@ -207,7 +208,7 @@ public class LanguageGameGUI
      while (currentPair.isCorrect());
    } // end of method getRandomSentencePair()
 
-   /**
+   /*
     * Sets player information.
     */
    private void setGoal() throws IOException
@@ -256,7 +257,7 @@ public class LanguageGameGUI
      }
    } // end of method setGoal()
 
-   /**
+   /*
     * Checks the correctness of the user's answer.
     */
    private void checkAnswer() throws IOException
@@ -308,7 +309,7 @@ public class LanguageGameGUI
      }
    }
 
-   /**
+   /*
     * Displays count of correct sentences.
     */
    private void displayResults()
