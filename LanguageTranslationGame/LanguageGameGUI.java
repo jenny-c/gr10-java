@@ -34,7 +34,7 @@ import java.util.Random;
 public class LanguageGameGUI
 {
   private static BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
-  
+
   private static final Color BACKGROUND_COLOUR = Color.WHITE;
   private static final String ERROR_IMAGE_UNAVAILABLE = "Something went wrong.";
   private static final int FRAME_HEIGHT = 600;
@@ -116,8 +116,6 @@ public class LanguageGameGUI
      goal = -1;
      correctCount = 0;
      language = "";
-
-     startGame();
    }
 
    /*
@@ -131,7 +129,7 @@ public class LanguageGameGUI
      // show last score
      if (lastScore != 0)
      {
-       System.out.println("Try to beat your last score: " + lastScore);
+       JOptionPane.showMessageDialog(null, "Try to beat your last score: " + lastScore);
      }
 
      // print random sentence
@@ -159,6 +157,10 @@ public class LanguageGameGUI
      buttonPanel.setBackground(BACKGROUND_COLOUR);
 
      ButtonListener actionListener = new ButtonListener();
+
+     startButton = new JButton("start game");
+     startButton.addActionListener(actionListener);
+     buttonPanel.add(startButton);
 
      quitButton = new JButton("quit");
      quitButton.addActionListener(actionListener);
@@ -226,10 +228,10 @@ public class LanguageGameGUI
          case "y":
            while (goal < 1)
            {
-             System.out.print("What is your goal for number of correct sentences? ");
+             inputString = JOptionPane.showInputDialog(null, "What is your goal for number of correct sentences? ");
              try
              {
-               goal = Integer.parseInt(console.readLine());
+               goal = Integer.parseInt(inputString);
                if (goal < 1)
                {
                  throw new NumberFormatException("");
@@ -237,7 +239,7 @@ public class LanguageGameGUI
              }
              catch (NumberFormatException exception)
              {
-               System.out.println("It looks like you didn't give a valid number. Please choose a maximum integer above 0.");
+               JOptionPane.showMessageDialog(null, "It looks like you didn't give a valid number. Please choose a maximum integer above 0.");
              }
            }
            valid = true;
@@ -416,6 +418,17 @@ public class LanguageGameGUI
          public void actionPerformed(ActionEvent event)
          {
              Object source = event.getSource();
+
+             if (source == startButton)
+             {
+               try
+               {
+                 startGame();
+               }
+               catch (IOException exception)
+               {
+               }
+             }
 
              if (source == quitButton)
              {
