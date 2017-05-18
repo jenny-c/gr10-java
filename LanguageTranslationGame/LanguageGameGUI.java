@@ -10,11 +10,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -37,9 +39,9 @@ public class LanguageGameGUI
 
   private static final Color BACKGROUND_COLOUR = Color.WHITE;
   private static final String ERROR_IMAGE_UNAVAILABLE = "Something went wrong.";
-  private static final int FRAME_HEIGHT = 600;
+  private static final int FRAME_HEIGHT = 700;
   private static final String FRAME_TITLE = "Translation Game";
-  private static final int FRAME_WIDTH = 600;
+  private static final int FRAME_WIDTH = 1100;
   private static final String IMAGE_CREDIT = "https://www.iconfinder.com/icons/87928/translate_icon";
   private static final String IMAGE_SOURCE = "images/translate.png";
   private static final int NUMBER_OF_SENTENCES = 10;
@@ -64,6 +66,12 @@ public class LanguageGameGUI
   private JButton startButton;
   private JButton quitButton;
 
+  private JPanel sentencePanel;
+  private JLabel inputLabel;
+  private JLabel sentenceLabel;
+  private JLabel textFieldLabel;
+  private JTextField textField;
+  private JButton submitButton;
    /**
     * Write a description of method main here.
     *
@@ -168,6 +176,33 @@ public class LanguageGameGUI
    }
 
    /*
+    * Constructs the panel for input and output.
+    */
+    private void makeSentencePanel()
+    {
+      sentencePanel = new JPanel();
+      sentencePanel.setBackground(Color.RED);
+
+      ButtonListener actionListener = new ButtonListener();
+
+      inputLabel = new JLabel("Translate: ");
+      sentencePanel.add(inputLabel);
+
+      sentenceLabel = new JLabel("");
+      sentencePanel.add(sentenceLabel);
+
+      textFieldLabel = new JLabel("Answer: ");
+      sentencePanel.add(textFieldLabel);
+
+      textField = new JTextField(20);
+      sentencePanel.add(textField);
+
+      submitButton = new JButton("submit");
+      quitButton.addActionListener(actionListener);
+      sentencePanel.add(submitButton);
+    }
+
+   /*
     * Creates the application frame and its content.
     */
    private void makeFrame() throws IOException
@@ -191,6 +226,9 @@ public class LanguageGameGUI
 
      makeButtonPanel();
      frame.add(buttonPanel, BorderLayout.PAGE_END);
+
+     makeSentencePanel();
+     frame.add(sentencePanel, BorderLayout.LINE_END);
 
      frame.pack();
      frame.setVisible(true);
