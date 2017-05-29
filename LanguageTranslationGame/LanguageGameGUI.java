@@ -97,10 +97,14 @@ public class LanguageGameGUI
    */
   public LanguageGameGUI() throws IOException
   {
-    // make frame
+    // construct frame
     makeFrame();
 
-    // sentences
+    // initialize images
+    homeImage = new ImageComponent(HOME_IMAGE_SOURCE);
+    movieImage = new ImageComponent(MOVIE_IMAGE_SOURCE);
+
+    // initialze sentences
     final String ENGLISH_FILE = "english.text";
     final String FRENCH_FILE = "french.text";
     final String RESULTS_FILE = "previousResults.text";
@@ -109,13 +113,13 @@ public class LanguageGameGUI
     BufferedReader frenchFile = new BufferedReader(new FileReader(FRENCH_FILE));
     BufferedReader resultsFile = new BufferedReader(new FileReader(RESULTS_FILE));
 
-    // assign to hashmap
+    // assign sentences to hashmap
     for (int i = 0; i < NUMBER_OF_SENTENCES; i++)
     {
       String englishSentence = englishFile.readLine();
       String frenchSentence = frenchFile.readLine();
       pairs.put((i+1), new SentencePairGUI(englishSentence, frenchSentence));
-    }
+    } // end of for (int...)
 
     // set scores
     highScore = Integer.parseInt(resultsFile.readLine());
@@ -134,21 +138,21 @@ public class LanguageGameGUI
   } // end of constructor LanguageGameGUI()
 
   /*
-   * Starts the game.
+   * Starts a new game.
    */
   private void startGame() throws IOException
   {
-    // get information -> when to stop
+    // get goal if wanted by user
     setGoal();
 
     // show last score
     if (lastScore != 0)
     {
       JOptionPane.showMessageDialog(null, "Try to beat your last score: " + lastScore);
-    }
+    } // end of if (lastScore != 0)
 
     // print random sentence
-    // check answer if right and change as necessary
+    // check answer if right and count as necessary
     getRandomSentencePair();
     randomizeLanguage();
   } // end of method startGame()
@@ -210,11 +214,6 @@ public class LanguageGameGUI
     image = new ImageComponent(DEFAULT_IMAGE_SOURCE);
     frame.add(image, BorderLayout.CENTER);
 
-    lastImage = image;
-
-    homeImage = new ImageComponent(HOME_IMAGE_SOURCE);
-    movieImage = new ImageComponent(MOVIE_IMAGE_SOURCE);
-
     if (image.getStatus() == 0)
     {
       imageCredit = new JLabel(DEFAULT_IMAGE_CREDIT);
@@ -224,6 +223,7 @@ public class LanguageGameGUI
       imageCredit = new JLabel(ERROR_IMAGE_UNAVAILABLE);
     } // end of if (image.getStatus() == 0)
     frame.add(imageCredit, BorderLayout.PAGE_START);
+    lastImage = image;
 
     makeButtonPanel();
     frame.add(buttonPanel, BorderLayout.PAGE_END);
@@ -240,10 +240,9 @@ public class LanguageGameGUI
    */
   private void getRandomSentencePair()
   {
-    Random rand;
+    Random rand = new Random();;
     do
     {
-      rand = new Random();
       sentenceNumber = rand.nextInt(pairs.size()+1);
       currentPair = pairs.get(sentenceNumber);
     }
@@ -258,6 +257,7 @@ public class LanguageGameGUI
     goal = -1;
     boolean valid = false;
 
+    // sets goal if requested
     while (!valid)
     {
       inputString = JOptionPane.showInputDialog("Would you like to set a goal? ");
@@ -277,13 +277,13 @@ public class LanguageGameGUI
               if (goal < 1)
               {
                 throw new NumberFormatException("");
-              }
+              } // end of if (goal < 1)
             }
             catch (NumberFormatException exception)
             {
               JOptionPane.showMessageDialog(null, "It looks like you didn't give a valid number. Please choose a maximum integer above 0.");
-            }
-          }
+            } // end of try
+          } // end of while (goal < 1)
           valid = true;
           break;
 
@@ -344,7 +344,7 @@ public class LanguageGameGUI
     {
       highScore = correctCount;
       highScoreLabel.setText("high score: " + highScore);
-    }
+    } // end of if (correctCount > highScore)
 
     if (correctCount != goal && !(answer.equals(SENTINEL_VALUE)))
     {
@@ -376,6 +376,11 @@ public class LanguageGameGUI
     // show current sentences
     sentenceLabel.setText(currentSentence);
 
+    updateImage();
+  } // end of method randomizeLanguage
+
+  private void updateImage()
+  {
     // change image to correspond
     switch (sentenceNumber)
     {
@@ -400,22 +405,22 @@ public class LanguageGameGUI
         frame.add(image, BorderLayout.CENTER);
 
         imageCredit.setText(DEFAULT_IMAGE_CREDIT);
-    }
+    } // end of switch (sentenceNumber)
   }
 
   private void endGame()
   {
     try
     {
-    // update results
-    changeResultsFile();
+      // update results
+      changeResultsFile();
 
-    // display results to user
-    displayResults();
+      // display results to user
+      displayResults();
     }
     catch (IOException exception)
     {
-    }
+    } // end of try
   } // end of method endGame()
 
   /*
@@ -438,11 +443,11 @@ public class LanguageGameGUI
     if (correctCount > highScore)
     {
       highScore = correctCount;
-    }
+    } // end of if (correctCount > highScore)
     if (correctCount < lowestScore)
     {
       lowestScore = correctCount;
-    }
+    } // end of if (correctCount < lowestScore)
     lastScore = correctCount;
 
     // change results in file
@@ -536,7 +541,7 @@ public class LanguageGameGUI
         }
         catch (IOException exception)
         {
-        }
+        } // end of try
       }
       else if (source == quitButton)
       {
@@ -552,7 +557,7 @@ public class LanguageGameGUI
         catch (IOException exception)
         {
         }
-      } // end of if ()
+      } // end of if (source == startButton)
     } // end of method actionPerformed(ActionEvent event)
   } // end of class ButtonListener
 } // end of class LanguageGameGUI
