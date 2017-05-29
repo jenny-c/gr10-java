@@ -387,6 +387,14 @@ public class LanguageGameGUI
 
         lastImage = homeImage;
 
+      case 9:
+        frame.remove(lastImage);
+        frame.add(movieImage, BorderLayout.CENTER);
+
+        imageCredit.setText(MOVIE_IMAGE_CREDIT);
+
+        lastImage = movieImage;
+
       default:
         frame.remove(lastImage);
         frame.add(image, BorderLayout.CENTER);
