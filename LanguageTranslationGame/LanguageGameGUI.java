@@ -36,12 +36,16 @@ public class LanguageGameGUI
   // static fields
   private static final Color BACKGROUND_COLOUR = Color.WHITE;
   private static BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+  private static final String DEFAULT_IMAGE_CREDIT = "https://www.iconfinder.com/icons/87928/translate_icon";
+  private static final String DEFAULT_IMAGE_SOURCE = "images/translate.png";
   private static final String ERROR_IMAGE_UNAVAILABLE = "Something went wrong.";
   private static final int FRAME_HEIGHT = 700;
   private static final String FRAME_TITLE = "Translation Game";
   private static final int FRAME_WIDTH = 1100;
-  private static final String IMAGE_CREDIT = "https://www.iconfinder.com/icons/87928/translate_icon";
-  private static final String IMAGE_SOURCE = "images/translate.png";
+  private static final String HOME_IMAGE_CREDIT = "https://www.iconfinder.com/icons/126572/home_house_icon";
+  private static final String HOME_IMAGE_SOURCE = "images/home.png";
+  private static final String MOVIE_IMAGE_CREDIT = "http://ideas.wikia.com/wiki/Category:Movies";
+  private static final String MOVIE_IMAGE_SOURCE = "images/movie.jpeg";
   private static final int NUMBER_OF_SENTENCES = 10;
   private static final String SENTINEL_VALUE = "exit";
 
@@ -55,19 +59,23 @@ public class LanguageGameGUI
   private JFrame frame;
   private int goal;
   private int highScore;
+  private JLabel highScoreLabel;
+  private ImageComponent homeImage;
   private ImageComponent image;
   private JLabel imageCredit;
   private String inputString;
   private String language;
+  private ImageComponent lastImage;
   private int lastScore;
   private int lowestScore;
+  private ImageComponent movieImage;
   private HashMap<Integer, SentencePairGUI> pairs = new HashMap<Integer, SentencePairGUI>();
   private JLabel promptLabel;
   private JButton quitButton;
-  private Random randomLanguage = new Random();
   private JPanel sentencePanel;
   private GridLayout sentencePanelLayout = new GridLayout(10, 2);
   private JLabel sentenceLabel;
+  private int sentenceNumber;
   private JButton startButton;
   private JButton submitButton;
   private JTextField textField;
@@ -91,9 +99,6 @@ public class LanguageGameGUI
   {
     // make frame
     makeFrame();
-
-    // images
-    image = new ImageComponent(IMAGE_SOURCE);
 
     // sentences
     final String ENGLISH_FILE = "english.text";
@@ -129,7 +134,7 @@ public class LanguageGameGUI
   } // end of constructor LanguageGameGUI()
 
   /*
-   * Starts the translation game and runs necessary methods.
+   * Starts the game.
    */
   private void startGame() throws IOException
   {
@@ -149,7 +154,7 @@ public class LanguageGameGUI
   } // end of method startGame()
 
   /*
-   * Constructs the button panel.
+   * Constructs the button panel for starting and quitting the game.
    */
   private void makeButtonPanel()
   {
@@ -166,7 +171,7 @@ public class LanguageGameGUI
   } // end of method makeButtonPanel()
 
   /*
-   * Constructs the panel for input and output.
+   * Constructs the panel for displaying sentences and receiving answers.
    */
   private void makeSentencePanel()
   {
@@ -188,6 +193,9 @@ public class LanguageGameGUI
     submitButton = new JButton("submit");
     submitButton.addActionListener(actionListener);
     sentencePanel.add(submitButton);
+
+    highScoreLabel = new JLabel("high score: " + highScore);
+    sentencePanel.add(highScoreLabel);
   } // end of method makeSentencePanel()
 
   /*
@@ -199,12 +207,17 @@ public class LanguageGameGUI
     frame.setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
     frame.getContentPane().setBackground(BACKGROUND_COLOUR);
 
-    image = new ImageComponent(IMAGE_SOURCE);
+    image = new ImageComponent(DEFAULT_IMAGE_SOURCE);
     frame.add(image, BorderLayout.CENTER);
+
+    lastImage = image;
+
+    homeImage = new ImageComponent(HOME_IMAGE_SOURCE);
+    movieImage = new ImageComponent(MOVIE_IMAGE_SOURCE);
 
     if (image.getStatus() == 0)
     {
-      imageCredit = new JLabel(IMAGE_CREDIT);
+      imageCredit = new JLabel(DEFAULT_IMAGE_CREDIT);
     }
     else
     {
@@ -231,7 +244,8 @@ public class LanguageGameGUI
     do
     {
       rand = new Random();
-      currentPair = pairs.get(rand.nextInt(pairs.size())+1);
+      sentenceNumber = rand.nextInt(pairs.size()+1);
+      currentPair = pairs.get(sentenceNumber);
     }
     while (currentPair.isCorrect());
   } // end of method getRandomSentencePair()
@@ -277,7 +291,7 @@ public class LanguageGameGUI
         case "no":
         case "N":
         case "n":
-          JOptionPane.showMessageDialog(null, "There will be no maximum number of sentences.", "Thing", JOptionPane.INFORMATION_MESSAGE);
+          JOptionPane.showMessageDialog(null, "There will be no maximum number of sentences.", "Maximum number", JOptionPane.INFORMATION_MESSAGE);
           valid = true;
           break;
 
@@ -323,7 +337,14 @@ public class LanguageGameGUI
       }
     } // end of if (!answer.equals(SENTINEL_VALUE))
 
+    // reset and update frame
     textField.setText("");
+
+    if (correctCount > highScore)
+    {
+      highScore = correctCount;
+      highScoreLabel.setText("high score: " + highScore);
+    }
 
     if (correctCount != goal && !(answer.equals(SENTINEL_VALUE)))
     {
@@ -338,6 +359,8 @@ public class LanguageGameGUI
 
   private void randomizeLanguage()
   {
+    Random randomLanguage = new Random();
+
     // randomize language
     if (randomLanguage.nextInt(2) == 0)
     {
@@ -352,16 +375,34 @@ public class LanguageGameGUI
 
     // show current sentences
     sentenceLabel.setText(currentSentence);
+
+    // change image to correspond
+    switch (sentenceNumber)
+    {
+      case 4:
+        frame.remove(lastImage);
+        frame.add(homeImage, BorderLayout.CENTER);
+
+        imageCredit.setText(HOME_IMAGE_CREDIT);
+
+        lastImage = homeImage;
+
+      default:
+        frame.remove(lastImage);
+        frame.add(image, BorderLayout.CENTER);
+
+        imageCredit.setText(DEFAULT_IMAGE_CREDIT);
+    }
   }
 
   private void endGame()
   {
     try
     {
-    // change file
+    // update results
     changeResultsFile();
 
-    // display results
+    // display results to user
     displayResults();
     }
     catch (IOException exception)
@@ -385,6 +426,7 @@ public class LanguageGameGUI
 
     PrintWriter outputFile = new PrintWriter(new FileWriter(RESULTS_FILE));
 
+    // update results as necessary
     if (correctCount > highScore)
     {
       highScore = correctCount;
@@ -395,6 +437,7 @@ public class LanguageGameGUI
     }
     lastScore = correctCount;
 
+    // change results in file
     outputFile.println(highScore);
     outputFile.println(lowestScore);
     outputFile.println(lastScore);
@@ -476,7 +519,6 @@ public class LanguageGameGUI
     public void actionPerformed(ActionEvent event)
     {
     Object source = event.getSource();
-    System.out.print("hi");
 
       if (source == startButton)
       {
