@@ -36,16 +36,11 @@ public class LanguageGameGUI
   // static fields
   private static final Color BACKGROUND_COLOUR = Color.WHITE;
   private static BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
-  private static final String DEFAULT_IMAGE_CREDIT = "https://www.iconfinder.com/icons/87928/translate_icon";
-  private static final String DEFAULT_IMAGE_SOURCE = "images/translate.png";
   private static final String ERROR_IMAGE_UNAVAILABLE = "Something went wrong.";
   private static final int FRAME_HEIGHT = 700;
   private static final String FRAME_TITLE = "Translation Game";
   private static final int FRAME_WIDTH = 1100;
-  private static final String HOME_IMAGE_CREDIT = "https://www.iconfinder.com/icons/126572/home_house_icon";
-  private static final String HOME_IMAGE_SOURCE = "images/home.png";
-  private static final String MOVIE_IMAGE_CREDIT = "http://ideas.wikia.com/wiki/Category:Movies";
-  private static final String MOVIE_IMAGE_SOURCE = "images/movie.jpeg";
+  private static final int NUMBER_OF_IMAGES = 11;
   private static final int NUMBER_OF_SENTENCES = 10;
   private static final String SENTINEL_VALUE = "exit";
 
@@ -54,21 +49,20 @@ public class LanguageGameGUI
   private ButtonListener actionListener = new ButtonListener();
   private JPanel buttonPanel;
   private int correctCount;
+  private JLabel credit;
   private SentencePairGUI currentPair;
   private String currentSentence;
   private JFrame frame;
   private int goal;
   private int highScore;
   private JLabel highScoreLabel;
-  private ImageComponent homeImage;
-  private ImageComponent image;
-  private JLabel imageCredit;
+  private ImageComponent[] image = new ImageComponent[NUMBER_OF_IMAGES];
+  private String[] imageCredit = new String[NUMBER_OF_IMAGES];
   private String inputString;
   private String language;
   private ImageComponent lastImage;
   private int lastScore;
   private int lowestScore;
-  private ImageComponent movieImage;
   private HashMap<Integer, SentencePairGUI> pairs = new HashMap<Integer, SentencePairGUI>();
   private JLabel promptLabel;
   private JButton quitButton;
@@ -97,12 +91,22 @@ public class LanguageGameGUI
    */
   public LanguageGameGUI() throws IOException
   {
+    // initialize images
+    final String IMAGE_FILE = "images.text";
+    final String IMAGE_CREDIT_FILE = "imageCredits.text";
+
+    BufferedReader imageFile = new BufferedReader(new FileReader(IMAGE_FILE));
+    BufferedReader imageCreditFile = new BufferedReader(new FileReader(IMAGE_CREDIT_FILE));
+
+    // assign images and credits to arrays
+    for (int i = 0; i < NUMBER_OF_IMAGES; i++)
+    {
+      image[i] = new ImageComponent("images/" + imageFile.readLine());
+      imageCredit[i] = imageCreditFile.readLine();
+    } // end of for (int i = 0...)
+
     // construct frame
     makeFrame();
-
-    // initialize images
-    homeImage = new ImageComponent(HOME_IMAGE_SOURCE);
-    movieImage = new ImageComponent(MOVIE_IMAGE_SOURCE);
 
     // initialze sentences
     final String ENGLISH_FILE = "english.text";
@@ -130,6 +134,8 @@ public class LanguageGameGUI
     englishFile.close();
     frenchFile.close();
     resultsFile.close();
+    imageFile.close();
+    imageCreditFile.close();
 
     // set default values
     goal = -1;
@@ -211,19 +217,18 @@ public class LanguageGameGUI
     frame.setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
     frame.getContentPane().setBackground(BACKGROUND_COLOUR);
 
-    image = new ImageComponent(DEFAULT_IMAGE_SOURCE);
-    frame.add(image, BorderLayout.CENTER);
+    frame.add(image[10], BorderLayout.CENTER);
 
-    if (image.getStatus() == 0)
+    if (image[10].getStatus() == 0)
     {
-      imageCredit = new JLabel(DEFAULT_IMAGE_CREDIT);
+      credit = new JLabel(imageCredit[10]);
     }
     else
     {
-      imageCredit = new JLabel(ERROR_IMAGE_UNAVAILABLE);
+      credit = new JLabel(ERROR_IMAGE_UNAVAILABLE);
     } // end of if (image.getStatus() == 0)
-    frame.add(imageCredit, BorderLayout.PAGE_START);
-    lastImage = image;
+    frame.add(credit, BorderLayout.PAGE_START);
+    lastImage = image[10];
 
     makeButtonPanel();
     frame.add(buttonPanel, BorderLayout.PAGE_END);
@@ -382,31 +387,14 @@ public class LanguageGameGUI
   private void updateImage()
   {
     // change image to correspond
-    switch (sentenceNumber)
-    {
-      case 4:
-        frame.remove(lastImage);
-        frame.add(homeImage, BorderLayout.CENTER);
+    frame.remove(lastImage);
+    int imageNumber = sentenceNumber-1;
+    frame.add(image[imageNumber], BorderLayout.CENTER);
 
-        imageCredit.setText(HOME_IMAGE_CREDIT);
+    credit.setText(imageCredit[imageNumber]);
 
-        lastImage = homeImage;
-
-      case 9:
-        frame.remove(lastImage);
-        frame.add(movieImage, BorderLayout.CENTER);
-
-        imageCredit.setText(MOVIE_IMAGE_CREDIT);
-
-        lastImage = movieImage;
-
-      default:
-        frame.remove(lastImage);
-        frame.add(image, BorderLayout.CENTER);
-
-        imageCredit.setText(DEFAULT_IMAGE_CREDIT);
-    } // end of switch (sentenceNumber)
-  }
+    lastImage = image[imageNumber];
+  } // end of method updateImage()
 
   private void endGame()
   {
