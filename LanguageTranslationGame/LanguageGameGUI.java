@@ -35,7 +35,8 @@ public class LanguageGameGUI
 {
   // static fields
   private static final Color BACKGROUND_COLOUR = Color.WHITE;
-  private static BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+  private static BufferedReader console =
+    new BufferedReader(new InputStreamReader(System.in));
   private static final String ERROR_IMAGE_UNAVAILABLE = "Something went wrong.";
   private static final int FRAME_HEIGHT = 700;
   private static final String FRAME_TITLE = "Translation Game";
@@ -63,7 +64,8 @@ public class LanguageGameGUI
   private ImageComponent lastImage;
   private int lastScore;
   private int lowestScore;
-  private HashMap<Integer, SentencePairGUI> pairs = new HashMap<Integer, SentencePairGUI>();
+  private HashMap<Integer, SentencePairGUI> pairs =
+    new HashMap<Integer, SentencePairGUI>();
   private JLabel promptLabel;
   private JButton quitButton;
   private JPanel sentencePanel;
@@ -98,7 +100,8 @@ public class LanguageGameGUI
     final String IMAGE_CREDIT_FILE = "imageCredits.text";
 
     BufferedReader imageFile = new BufferedReader(new FileReader(IMAGE_FILE));
-    BufferedReader imageCreditFile = new BufferedReader(new FileReader(IMAGE_CREDIT_FILE));
+    BufferedReader imageCreditFile =
+      new BufferedReader(new FileReader(IMAGE_CREDIT_FILE));
 
     // assign images and credits to arrays
     for (int i = 0; i < NUMBER_OF_IMAGES; i++)
@@ -115,9 +118,12 @@ public class LanguageGameGUI
     final String FRENCH_FILE = "french.text";
     final String RESULTS_FILE = "previousResults.text";
 
-    BufferedReader englishFile = new BufferedReader(new FileReader(ENGLISH_FILE));
-    BufferedReader frenchFile = new BufferedReader(new FileReader(FRENCH_FILE));
-    BufferedReader resultsFile = new BufferedReader(new FileReader(RESULTS_FILE));
+    BufferedReader englishFile =
+      new BufferedReader(new FileReader(ENGLISH_FILE));
+    BufferedReader frenchFile =
+      new BufferedReader(new FileReader(FRENCH_FILE));
+    BufferedReader resultsFile =
+      new BufferedReader(new FileReader(RESULTS_FILE));
 
     // assign sentences to hashmap
     for (int i = 0; i < NUMBER_OF_SENTENCES; i++)
@@ -186,7 +192,10 @@ public class LanguageGameGUI
     if (!answer.equals(SENTINEL_VALUE))
     {
       // answer is correct
-      if ((language.equals("english") && answer.equals(currentPair.getFrenchSentence()) || language.equals("french") && answer.equals(currentPair.getEnglishSentence())))
+      if ((language.equals("english") &&
+        answer.equals(currentPair.getFrenchSentence()) ||
+        language.equals("french") &&
+        answer.equals(currentPair.getEnglishSentence())))
       {
         currentPair.setCorrectness(true);
         JOptionPane.showMessageDialog(null, "Correct!");
@@ -388,7 +397,8 @@ public class LanguageGameGUI
     // sets goal if requested
     while (!valid)
     {
-      inputString = JOptionPane.showInputDialog("Would you like to set a goal? ");
+      inputString =
+        JOptionPane.showInputDialog("Would you like to set a goal? ");
 
       switch (inputString)
       {
@@ -398,7 +408,8 @@ public class LanguageGameGUI
         case "y":
           while (goal < 1)
           {
-            inputString = JOptionPane.showInputDialog(null, "What is your goal for number of correct sentences? ");
+            inputString = JOptionPane.showInputDialog(null,
+              "What is your goal for number of correct sentences? ");
             try
             {
               goal = Integer.parseInt(inputString);
@@ -409,7 +420,9 @@ public class LanguageGameGUI
             }
             catch (NumberFormatException exception)
             {
-              JOptionPane.showMessageDialog(null, "It looks like you didn't give a valid number. Please choose a maximum integer above 0.");
+              JOptionPane.showMessageDialog(null,
+                "It looks like you didn't give a valid number." +
+                " Please choose a maximum integer above 0.");
             } // end of try
           } // end of while (goal < 1)
           valid = true;
@@ -419,12 +432,17 @@ public class LanguageGameGUI
         case "no":
         case "N":
         case "n":
-          JOptionPane.showMessageDialog(null, "There will be no maximum number of sentences.", "Maximum number", JOptionPane.INFORMATION_MESSAGE);
+          JOptionPane.showMessageDialog(null,
+            "There will be no maximum number of sentences.",
+            "Maximum number", JOptionPane.INFORMATION_MESSAGE);
           valid = true;
           break;
 
         default:
-          JOptionPane.showMessageDialog(null, "It looks like you didn't choose a valid response. Please choose either yes or no.", "Error", JOptionPane.ERROR_MESSAGE);
+          JOptionPane.showMessageDialog(null,
+          "It looks like you didn't choose a valid response." +
+          " Please choose either yes or no.", "Error",
+          JOptionPane.ERROR_MESSAGE);
       } // end of switch(inputString)
     } // end of while(!valid)
   } // end of method setGoal()
@@ -440,7 +458,8 @@ public class LanguageGameGUI
     // show last score
     if (lastScore != 0)
     {
-      JOptionPane.showMessageDialog(null, "Try to beat your last score: " + lastScore);
+      JOptionPane.showMessageDialog(null,
+        "Try to beat your last score: " + lastScore);
     } // end of if (lastScore != 0)
 
     // run the game
@@ -516,6 +535,9 @@ public class LanguageGameGUI
 
     /* constructors */
 
+    /**
+     * Creates a component with a drawn image.
+     */
     public ImageComponent(String fileName)
     {
       bufferedImage = null;
@@ -558,12 +580,11 @@ public class LanguageGameGUI
     /* mutators */
 
     /*
-     *
+     * Called when the contents of the component should be painted.
      */
     public void paint(Graphics graphicsContext)
     {
       graphicsContext.drawImage(bufferedImage, 0, 0, null);
     } // end of method paint(Graphics graphicsContext)
-
   } // end of class ImageComponent
 } // end of class LanguageGameGUI
