@@ -1,9 +1,9 @@
 import java.util.HashMap;
 /**
- * Write a description of class SentencePair here.
+ * Holds two sentences, one in French and one in English.
  *
- * @author GivenName FamilyName
- * @version 1.0 yyyy-mm-dd
+ * @author Jenny Chen
+ * @version 1.0 2017-05-03
  */
 public class SentencePair
 {
@@ -23,8 +23,8 @@ public class SentencePair
 
    } // end of method main(String[] argument)
 
+   /* constructors */
 
-   // constructors
    /**
     * Constructs a pair of sentences with specified values.
     */
@@ -33,10 +33,10 @@ public class SentencePair
       this.englishSentence = englishSentence;
       this.frenchSentence = frenchSentence;
       correct = false;
-    }
+    } // end of constructor SentencePair(String, String)
 
+    /* accessors */
 
-    // accessors
     /**
      * Returns a string representation of this sentence pair.
      *
@@ -51,7 +51,7 @@ public class SentencePair
       + "french sentence: " + frenchSentence
       + "correct: " + correct
       + "]";
-    }
+    } // end of method toString()
 
     /**
      * Returns the englishSentence value of this sentence pair.
@@ -61,7 +61,7 @@ public class SentencePair
     public String getEnglishSentence()
     {
       return englishSentence;
-    }
+    } // end of method getEnglishSentence()
 
     /**
      * Returns the frenchSentence value of this sentence pair.
@@ -71,7 +71,7 @@ public class SentencePair
     public String getFrenchSentence()
     {
      return frenchSentence;
-    }
+   } // end of method getFrenchSentence()
 
     /**
      * Returns the correct value of this sentence pair.
@@ -81,10 +81,10 @@ public class SentencePair
     public boolean isCorrect()
     {
       return correct;
-    }
+    } // end of method isCorrect()
 
+    /* mutators */
 
-    // mutators
     /**
      * Sets the englishSentence value of this sentence pair.
      *
@@ -93,7 +93,7 @@ public class SentencePair
     public void setEnglishSentence(String englishSentence)
     {
       this.englishSentence = englishSentence;
-    }
+    } // end of method setEnglishSentence(String)
 
     /**
      * Sets the frenchSentence value of this sentence pair.
@@ -103,7 +103,7 @@ public class SentencePair
     public void setFrenchSentence(String frenchSentence)
     {
       this.frenchSentence = frenchSentence;
-    }
+    } // end of method setFrenchSentence(String)
 
     /**
      * Sets the correct value of this sentence pair.
@@ -113,5 +113,5 @@ public class SentencePair
     public void setCorrectness(boolean correct)
     {
       this.correct = correct;
-    }
+    } // end of method setCorrectness(boolean)
 } // end of class SentencePair
