@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
- * A game in which the player must successfully translate randomly-presentence sentences.
+ * A game in which the player must successfully translate sentences.
  *
  * @author Jenny Chen
  * @version 1.0 2017-05-26
@@ -86,6 +86,8 @@ public class LanguageGameGUI
     LanguageGameGUI game = new LanguageGameGUI();
   } // end of method main(String[] argument)
 
+  /* constructors */
+
   /**
    * Constructs a default language game.
    */
@@ -141,44 +143,116 @@ public class LanguageGameGUI
     goal = -1;
     correctCount = 0;
     language = "";
+    answer = "";
   } // end of constructor LanguageGameGUI()
 
-  /*
-   * Starts a new game.
-   */
-  private void startGame() throws IOException
-  {
-    // get goal if wanted by user
-    setGoal();
+  /* instance methods */
 
-    // show last score
-    if (lastScore != 0)
+  /*
+   * Updates the results for the next game.
+   */
+  private void changeResultsFile() throws IOException
+  {
+    final String RESULTS_FILE = "previousResults.text";
+    PrintWriter outputFile = new PrintWriter(new FileWriter(RESULTS_FILE));
+
+    // update results as necessary
+    if (correctCount > highScore)
     {
-      JOptionPane.showMessageDialog(null, "Try to beat your last score: " + lastScore);
-    } // end of if (lastScore != 0)
+      highScore = correctCount;
+    } // end of if (correctCount > highScore)
+    if (correctCount < lowestScore)
+    {
+      lowestScore = correctCount;
+    } // end of if (correctCount < lowestScore)
+    lastScore = correctCount;
 
-    // print random sentence
-    // check answer if right and count as necessary
-    getRandomSentencePair();
-    randomizeLanguage();
-  } // end of method startGame()
+    // change results in file
+    outputFile.println(highScore);
+    outputFile.println(lowestScore);
+    outputFile.println(lastScore);
+
+    // wrap up
+    outputFile.close();
+  } // end of method changeResultsFile()
 
   /*
-   * Constructs the button panel for starting and quitting the game.
+   * Checks the correctness of the user's answer.
    */
-  private void makeButtonPanel()
+  private void checkAnswer() throws IOException
   {
-    buttonPanel = new JPanel();
-    buttonPanel.setBackground(BACKGROUND_COLOUR);
+    SentencePair sentence;
+    // check answer
+    if (!answer.equals(SENTINEL_VALUE))
+    {
+      // answer is correct
+      if ((language.equals("english") && answer.equals(currentPair.getFrenchSentence()) || language.equals("french") && answer.equals(currentPair.getEnglishSentence())))
+      {
+        currentPair.setCorrectness(true);
+        JOptionPane.showMessageDialog(null, "Correct!");
+        correctCount++;
+      }
+      // answer is incorrect
+      else
+      {
+        JOptionPane.showMessageDialog(null, "Wrong..");
+      }
+    } // end of if (!answer.equals(SENTINEL_VALUE))
 
-    startButton = new JButton("start game");
-    startButton.addActionListener(actionListener);
-    buttonPanel.add(startButton);
+    // reset and update frame
+    textField.setText("");
 
-    quitButton = new JButton("quit");
-    quitButton.addActionListener(actionListener);
-    buttonPanel.add(quitButton);
-  } // end of method makeButtonPanel()
+    if (correctCount > highScore)
+    {
+      highScore = correctCount;
+      highScoreLabel.setText("high score: " + highScore);
+    } // end of if (correctCount > highScore)
+
+    // continue game if not over
+    runGame();
+  } // end of method checkAnswer()
+
+  /*
+   * Displays count of correct sentences.
+   */
+  private void displayResults()
+  {
+    JOptionPane.showMessageDialog(null, "\nNumber of sentences correct: " +
+      correctCount + "\n        All time high score: " + highScore +
+      "\n      All time lowest score: " + lowestScore);
+  } // end of displayResults()
+
+  /*
+   * Ends the game
+   */
+  private void endGame()
+  {
+    try
+    {
+      // update results
+      changeResultsFile();
+
+      // display results to user
+      displayResults();
+    }
+    catch (IOException exception)
+    {
+    } // end of try
+  } // end of method endGame()
+
+  /*
+   * Returns a random sentence pair.
+   */
+  private void getRandomSentencePair()
+  {
+    Random rand = new Random();
+    do
+    {
+      sentenceNumber = rand.nextInt(pairs.size()+1);
+      currentPair = pairs.get(sentenceNumber);
+    }
+    while (currentPair.isCorrect());
+  } // end of method getRandomSentencePair()
 
   /*
    * Constructs the panel for displaying sentences and receiving answers.
@@ -209,6 +283,23 @@ public class LanguageGameGUI
   } // end of method makeSentencePanel()
 
   /*
+   * Constructs the button panel for starting and quitting the game.
+   */
+  private void makeButtonPanel()
+  {
+    buttonPanel = new JPanel();
+    buttonPanel.setBackground(BACKGROUND_COLOUR);
+
+    startButton = new JButton("start game");
+    startButton.addActionListener(actionListener);
+    buttonPanel.add(startButton);
+
+    quitButton = new JButton("quit");
+    quitButton.addActionListener(actionListener);
+    buttonPanel.add(quitButton);
+  } // end of method makeButtonPanel()
+
+  /*
    * Creates the application frame and its content.
    */
   private void makeFrame() throws IOException
@@ -217,6 +308,7 @@ public class LanguageGameGUI
     frame.setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
     frame.getContentPane().setBackground(BACKGROUND_COLOUR);
 
+    // show default image
     frame.add(image[10], BorderLayout.CENTER);
 
     if (image[10].getStatus() == 0)
@@ -230,6 +322,7 @@ public class LanguageGameGUI
     frame.add(credit, BorderLayout.PAGE_START);
     lastImage = image[10];
 
+    // create panels
     makeButtonPanel();
     frame.add(buttonPanel, BorderLayout.PAGE_END);
 
@@ -241,21 +334,51 @@ public class LanguageGameGUI
   } // end of method makeFrame()
 
   /*
-   * Returns a random sentence pair.
+   * Selects a random language.
    */
-  private void getRandomSentencePair()
+  private void randomizeLanguage()
   {
-    Random rand = new Random();;
-    do
+    Random randomLanguage = new Random();
+
+    // randomize language
+    if (randomLanguage.nextInt(2) == 0)
     {
-      sentenceNumber = rand.nextInt(pairs.size()+1);
-      currentPair = pairs.get(sentenceNumber);
+      currentSentence = currentPair.getEnglishSentence();
+      language = "english";
     }
-    while (currentPair.isCorrect());
-  } // end of method getRandomSentencePair()
+    else
+    {
+      currentSentence = currentPair.getFrenchSentence();
+      language = "french";
+    } // end of if (randomLanguage.nextInt(2) == 0)
+
+    // show current sentences
+    sentenceLabel.setText(currentSentence);
+
+    // change image to match current sentence
+    updateImage();
+  } // end of method randomizeLanguage
 
   /*
-   * Sets player information.
+   * Continues the game.
+   */
+  private void runGame()
+  {
+    // continue game
+    if (correctCount != goal && !(answer.equals(SENTINEL_VALUE)))
+    {
+      getRandomSentencePair();
+      randomizeLanguage();
+    }
+    // game is over
+    else
+    {
+      endGame();
+    }// end of if (correctCount != goal..)
+  }
+
+  /*
+   * Sets player goal
    */
   private void setGoal() throws IOException
   {
@@ -307,86 +430,29 @@ public class LanguageGameGUI
   } // end of method setGoal()
 
   /*
-   * Checks the correctness of the user's answer.
+   * Starts a new game.
    */
-  private void checkAnswer() throws IOException
+  private void startGame() throws IOException
   {
-    // check answer
-    if (!answer.equals(SENTINEL_VALUE))
+    // get goal if wanted by user
+    setGoal();
+
+    // show last score
+    if (lastScore != 0)
     {
-      if (language.equals("english"))
-      {
-        if (answer.equals(currentPair.getFrenchSentence()))
-        {
-          currentPair.setCorrectness(true);
-          JOptionPane.showMessageDialog(null, "Correct!");
-          correctCount++;
-        }
-        else
-        {
-          JOptionPane.showMessageDialog(null, "Wrong..");
-        }
-      }
-      else
-      {
-        if (answer.equals(currentPair.getEnglishSentence()))
-        {
-          currentPair.setCorrectness(true);
-          JOptionPane.showMessageDialog(null, "Correct!");
-          correctCount++;
-        }
-        else
-        {
-          JOptionPane.showMessageDialog(null, "Wrong..");
-        }
-      }
-    } // end of if (!answer.equals(SENTINEL_VALUE))
+      JOptionPane.showMessageDialog(null, "Try to beat your last score: " + lastScore);
+    } // end of if (lastScore != 0)
 
-    // reset and update frame
-    textField.setText("");
+    // run the game
+    runGame();
+  } // end of method startGame()
 
-    if (correctCount > highScore)
-    {
-      highScore = correctCount;
-      highScoreLabel.setText("high score: " + highScore);
-    } // end of if (correctCount > highScore)
-
-    if (correctCount != goal && !(answer.equals(SENTINEL_VALUE)))
-    {
-      getRandomSentencePair();
-      randomizeLanguage();
-    }
-    else
-    {
-      endGame();
-    }// end of if (correctCount != goal..)
-  } // end of method checkAnswer()
-
-  private void randomizeLanguage()
-  {
-    Random randomLanguage = new Random();
-
-    // randomize language
-    if (randomLanguage.nextInt(2) == 0)
-    {
-      currentSentence = currentPair.getEnglishSentence();
-      language = "english";
-    }
-    else
-    {
-      currentSentence = currentPair.getFrenchSentence();
-      language = "french";
-    } // end of if (randomLanguage.nextInt(2) == 0)
-
-    // show current sentences
-    sentenceLabel.setText(currentSentence);
-
-    updateImage();
-  } // end of method randomizeLanguage
-
+  /*
+   * Updates the image to match with the sentences.
+   */
   private void updateImage()
   {
-    // change image to correspond
+    // change image to correspond with sentence
     frame.remove(lastImage);
     int imageNumber = sentenceNumber-1;
     frame.add(image[imageNumber], BorderLayout.CENTER);
@@ -396,55 +462,44 @@ public class LanguageGameGUI
     lastImage = image[imageNumber];
   } // end of method updateImage()
 
-  private void endGame()
+  /* classes */
+
+  private class ButtonListener implements ActionListener
   {
-    try
+    /*
+     * Responds to button events.
+     */
+    public void actionPerformed(ActionEvent event)
     {
-      // update results
-      changeResultsFile();
+    Object source = event.getSource();
 
-      // display results to user
-      displayResults();
-    }
-    catch (IOException exception)
-    {
-    } // end of try
-  } // end of method endGame()
-
-  /*
-   * Displays count of correct sentences.
-   */
-  private void displayResults()
-  {
-    JOptionPane.showMessageDialog(null, "\nNumber of sentences correct: " +
-      correctCount + "\n        All time high score: " + highScore +
-      "\n      All time lowest score: " + lowestScore);
-  } // end of displayResults()
-
-  private void changeResultsFile() throws IOException
-  {
-    final String RESULTS_FILE = "previousResults.text";
-
-    PrintWriter outputFile = new PrintWriter(new FileWriter(RESULTS_FILE));
-
-    // update results as necessary
-    if (correctCount > highScore)
-    {
-      highScore = correctCount;
-    } // end of if (correctCount > highScore)
-    if (correctCount < lowestScore)
-    {
-      lowestScore = correctCount;
-    } // end of if (correctCount < lowestScore)
-    lastScore = correctCount;
-
-    // change results in file
-    outputFile.println(highScore);
-    outputFile.println(lowestScore);
-    outputFile.println(lastScore);
-
-    outputFile.close();
-  } // end of method changeResultsFile()
+      if (source == startButton)
+      {
+        try
+        {
+          startGame();
+        }
+        catch (IOException exception)
+        {
+        } // end of try
+      }
+      else if (source == quitButton)
+      {
+        System.exit(0);
+      }
+      else if (source == submitButton)
+      {
+        answer = textField.getText();
+        try
+        {
+          checkAnswer();
+        }
+        catch (IOException exception)
+        {
+        }
+      } // end of if (source == startButton)
+    } // end of method actionPerformed(ActionEvent event)
+  } // end of class ButtonListener
 
   /*
    * A component with a drawn image.
@@ -511,41 +566,4 @@ public class LanguageGameGUI
     } // end of method paint(Graphics graphicsContext)
 
   } // end of class ImageComponent
-
-  private class ButtonListener implements ActionListener
-  {
-    /*
-     * Responds to button events.
-     */
-    public void actionPerformed(ActionEvent event)
-    {
-    Object source = event.getSource();
-
-      if (source == startButton)
-      {
-        try
-        {
-          startGame();
-        }
-        catch (IOException exception)
-        {
-        } // end of try
-      }
-      else if (source == quitButton)
-      {
-        System.exit(0);
-      }
-      else if (source == submitButton)
-      {
-        answer = textField.getText();
-        try
-        {
-          checkAnswer();
-        }
-        catch (IOException exception)
-        {
-        }
-      } // end of if (source == startButton)
-    } // end of method actionPerformed(ActionEvent event)
-  } // end of class ButtonListener
 } // end of class LanguageGameGUI
