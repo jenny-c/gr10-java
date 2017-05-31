@@ -292,7 +292,7 @@ public class LanguageGame
   } // end of method makeSentencePanel()
 
   /*
-   * Constructs the button panel for starting and quitting the game.
+   * Constructs the button panel.
    */
   private void makeButtonPanel()
   {
@@ -473,12 +473,12 @@ public class LanguageGame
   {
     // change image to correspond with sentence
     frame.remove(lastImage);
-    int imageNumber = sentenceNumber-1;
-    frame.add(image[imageNumber], BorderLayout.CENTER);
+    int imageIndex = sentenceNumber-1;
+    frame.add(image[imageIndex], BorderLayout.CENTER);
 
-    credit.setText(imageCredit[imageNumber]);
+    credit.setText(imageCredit[imageIndex]);
 
-    lastImage = image[imageNumber];
+    lastImage = image[imageIndex];
   } // end of method updateImage()
 
   /* classes */
@@ -554,15 +554,17 @@ public class LanguageGame
 
     /* accessors */
 
-    /*
+    /**
      * Returns the status of this image component
+     *
+     * @return a int representing the status of this image compoenent
      */
     public int getStatus()
     {
       return status;
     } // end of method getStatus()
 
-    /*
+    /**
      * Returns a string representation of this component.
      *
      * @return a string representing this component
