@@ -38,6 +38,7 @@ public class LanguageGame
   private static BufferedReader console =
     new BufferedReader(new InputStreamReader(System.in));
   private static final String ERROR_IMAGE_UNAVAILABLE = "Something went wrong.";
+  private static final String FILE_UNAVAILABLE = "File not found.";
   private static final int FRAME_HEIGHT = 700;
   private static final String FRAME_TITLE = "Translation Game";
   private static final int FRAME_WIDTH = 1100;
@@ -59,7 +60,6 @@ public class LanguageGame
   private JLabel highScoreLabel;
   private ImageComponent[] image = new ImageComponent[NUMBER_OF_IMAGES];
   private String[] imageCredit = new String[NUMBER_OF_IMAGES];
-  private String inputString;
   private String language;
   private ImageComponent lastImage;
   private int lastScore;
@@ -95,55 +95,14 @@ public class LanguageGame
    */
   public LanguageGame() throws IOException
   {
-    // initialize images
-    final String IMAGE_FILE = "images.text";
-    final String IMAGE_CREDIT_FILE = "imageCredits.text";
-
-    BufferedReader imageFile = new BufferedReader(new FileReader(IMAGE_FILE));
-    BufferedReader imageCreditFile =
-      new BufferedReader(new FileReader(IMAGE_CREDIT_FILE));
-
-    // assign images and credits to arrays
-    for (int i = 0; i < NUMBER_OF_IMAGES; i++)
-    {
-      image[i] = new ImageComponent("images/" + imageFile.readLine());
-      imageCredit[i] = imageCreditFile.readLine();
-    } // end of for (int i = 0...)
+    loadImages();
 
     // construct frame
     makeFrame();
 
-    // initialze sentences
-    final String ENGLISH_FILE = "english.text";
-    final String FRENCH_FILE = "french.text";
-    final String RESULTS_FILE = "previousResults.text";
+    loadSentences();
 
-    BufferedReader englishFile =
-      new BufferedReader(new FileReader(ENGLISH_FILE));
-    BufferedReader frenchFile =
-      new BufferedReader(new FileReader(FRENCH_FILE));
-    BufferedReader resultsFile =
-      new BufferedReader(new FileReader(RESULTS_FILE));
-
-    // assign sentences to hashmap
-    for (int i = 0; i < NUMBER_OF_SENTENCES; i++)
-    {
-      String englishSentence = englishFile.readLine();
-      String frenchSentence = frenchFile.readLine();
-      pairs.put((i+1), new SentencePair(englishSentence, frenchSentence));
-    } // end of for (int...)
-
-    // set scores
-    highScore = Integer.parseInt(resultsFile.readLine());
-    lowestScore = Integer.parseInt(resultsFile.readLine());
-    lastScore = Integer.parseInt(resultsFile.readLine());
-
-    // wrap up
-    englishFile.close();
-    frenchFile.close();
-    resultsFile.close();
-    imageFile.close();
-    imageCreditFile.close();
+    loadScores();
 
     // set default values
     goal = -1;
@@ -262,6 +221,98 @@ public class LanguageGame
     }
     while (currentPair.isCorrect());
   } // end of method getRandomSentencePair()
+
+  /*
+   * Loads images into arrays.
+   */
+  private void loadImages() throws IOException
+  {
+    // initialize images
+    final String IMAGE_FILE = "images.text";
+    final String IMAGE_CREDIT_FILE = "imageCredits.text";
+
+    BufferedReader imageFile = new BufferedReader(new FileReader(IMAGE_FILE));
+    BufferedReader imageCreditFile =
+      new BufferedReader(new FileReader(IMAGE_CREDIT_FILE));
+
+    // assign images and credits to arrays
+    for (int i = 0; i < NUMBER_OF_IMAGES; i++)
+    {
+      try
+      {
+        image[i] = new ImageComponent("images/" + imageFile.readLine());
+        imageCredit[i] = imageCreditFile.readLine();
+      }
+      catch (Exception exception)
+      {
+        System.out.println(FILE_UNAVAILABLE);
+      }
+    } // end of for (int i = 0...)
+
+    // wrap up
+    imageFile.close();
+    imageCreditFile.close();
+  } // end of method loadImages()
+
+  /*
+   * Sets starting score values.
+   */
+  private void loadScores() throws IOException
+  {
+    final String RESULTS_FILE = "previousResults.text";
+
+    BufferedReader resultsFile =
+      new BufferedReader(new FileReader(RESULTS_FILE));
+
+    // set scores
+    try
+    {
+      highScore = Integer.parseInt(resultsFile.readLine());
+      lowestScore = Integer.parseInt(resultsFile.readLine());
+      lastScore = Integer.parseInt(resultsFile.readLine());
+    }
+    catch (Exception exception)
+    {
+      System.out.println(FILE_UNAVAILABLE);
+    }
+
+    // wrap up
+    resultsFile.close();
+  } // end of method loadScores()
+
+  /*
+   * Loads sentences into hashmap.
+   */
+  private void loadSentences() throws IOException
+  {
+    // initialze sentences
+    final String ENGLISH_FILE = "english.text";
+    final String FRENCH_FILE = "french.text";
+
+    BufferedReader englishFile =
+      new BufferedReader(new FileReader(ENGLISH_FILE));
+    BufferedReader frenchFile =
+      new BufferedReader(new FileReader(FRENCH_FILE));
+
+    // assign sentences to hashmap
+    for (int i = 0; i < NUMBER_OF_SENTENCES; i++)
+    {
+      try
+      {
+        String englishSentence = englishFile.readLine();
+        String frenchSentence = frenchFile.readLine();
+        pairs.put((i+1), new SentencePair(englishSentence, frenchSentence));
+      }
+      catch (Exception exception)
+      {
+        System.out.println(FILE_UNAVAILABLE);
+      }
+    } // end of for (int...)
+
+    // wrap up
+    englishFile.close();
+    frenchFile.close();
+  } // end of method loadSentences()
 
   /*
    * Constructs the panel for displaying sentences and receiving answers.
@@ -397,7 +448,7 @@ public class LanguageGame
     // sets goal if requested
     while (!valid)
     {
-      inputString =
+      String inputString =
         JOptionPane.showInputDialog("Would you like to set a goal? ");
 
       switch (inputString)
