@@ -48,7 +48,7 @@ public class LanguageGame
 
   // instance fields
   private String answer;
-  private ButtonListener actionListener = new ButtonListener();
+  private ButtonListener actionListener;
   private JPanel buttonPanel;
   private int correctCount;
   private JLabel credit;
@@ -58,18 +58,17 @@ public class LanguageGame
   private int goal;
   private int highScore;
   private JLabel highScoreLabel;
-  private ImageComponent[] image = new ImageComponent[NUMBER_OF_IMAGES];
-  private String[] imageCredit = new String[NUMBER_OF_IMAGES];
+  private ImageComponent[] image;
+  private String[] imageCredit;
   private String language;
   private ImageComponent lastImage;
   private int lastScore;
   private int lowestScore;
-  private HashMap<Integer, SentencePair> pairs =
-    new HashMap<Integer, SentencePair>();
+  private HashMap<Integer, SentencePair> pairs;
   private JLabel promptLabel;
   private JButton quitButton;
   private JPanel sentencePanel;
-  private GridLayout sentencePanelLayout = new GridLayout(10, 2);
+  private GridLayout sentencePanelLayout;
   private JLabel sentenceLabel;
   private int sentenceNumber;
   private JButton startButton;
@@ -95,20 +94,21 @@ public class LanguageGame
    */
   public LanguageGame() throws IOException
   {
+    // initialize instance fields
+    actionListener = new ButtonListener();
+    answer = "";
+    correctCount = 0;
+    goal = -1;
+    language = "";
+    sentencePanelLayout = new GridLayout(10, 2);
+
     loadImages();
 
-    // construct frame
     makeFrame();
 
     loadSentences();
 
     loadScores();
-
-    // set default values
-    goal = -1;
-    correctCount = 0;
-    language = "";
-    answer = "";
   } // end of constructor LanguageGame()
 
   /* instance methods */
@@ -227,7 +227,10 @@ public class LanguageGame
    */
   private void loadImages() throws IOException
   {
-    // initialize images
+    // initialize instance fields
+    image = new ImageComponent[NUMBER_OF_IMAGES];
+    imageCredit = new String[NUMBER_OF_IMAGES];
+
     final String IMAGE_FILE = "images.text";
     final String IMAGE_CREDIT_FILE = "imageCredits.text";
 
@@ -285,7 +288,9 @@ public class LanguageGame
    */
   private void loadSentences() throws IOException
   {
-    // initialze sentences
+    // initialze instance fields
+    pairs = new HashMap<Integer, SentencePair>();
+
     final String ENGLISH_FILE = "english.text";
     final String FRENCH_FILE = "french.text";
 
@@ -442,7 +447,6 @@ public class LanguageGame
    */
   private void setGoal() throws IOException
   {
-    goal = -1;
     boolean valid = false;
 
     // sets goal if requested
