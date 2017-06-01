@@ -111,7 +111,7 @@ public class LanguageGame
     loadScores();
   } // end of constructor LanguageGame()
 
-  /* instance methods */
+  /* private methods */
 
   /*
    * Updates the results for the next game.
