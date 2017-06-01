@@ -251,7 +251,7 @@ public class LanguageGame
       }
     } // end of for (int i = 0...)
 
-    // wrap up
+    // Wrap up.
     imageFile.close();
     imageCreditFile.close();
   } // end of method loadImages()
@@ -637,6 +637,6 @@ public class LanguageGame
     public void paint(Graphics graphicsContext)
     {
       graphicsContext.drawImage(bufferedImage, 0, 0, null);
-    } // end of method paint(Graphics graphicsContext)
+    } gend of method paint(Graphics graphicsContext)
   } // end of class ImageComponent
 } // end of class LanguageGame
